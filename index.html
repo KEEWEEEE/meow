@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🍪 A Royal Invitation from the Cookie Kingdom</title>
+<meta name="description" content="The Cookie Kingdom has a treasure waiting for you. Tap to claim it!">
+<style>
+  :root {
+    --sky1: #ffd6a5;
+    --sky2: #ff9f68;
+    --frosting: #fff4e0;
+    --choco: #5b3216;
+    --gold: #ffcc33;
+    --berry: #e8457a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Trebuchet MS", system-ui, -apple-system, sans-serif;
+    color: var(--choco);
+    background: linear-gradient(180deg, var(--sky1) 0%, var(--sky2) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 16px;
+    cursor: pointer;
+    user-select: none;
+    overflow: hidden;
+  }
+  .sweet {
+    position: fixed;
+    top: -60px;
+    font-size: 32px;
+    animation: fall linear infinite;
+    pointer-events: none;
+    opacity: .9;
+  }
+  @keyframes fall {
+    to { transform: translateY(115vh) rotate(360deg); }
+  }
+  .card {
+    position: relative;
+    z-index: 2;
+    max-width: 440px;
+    width: 100%;
+    background: var(--frosting);
+    border: 6px solid var(--choco);
+    border-radius: 28px;
+    padding: 28px 22px 32px;
+    box-shadow: 0 12px 0 var(--choco), 0 20px 40px rgba(0,0,0,.25);
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    left: 12px; right: 12px; top: -6px;
+    height: 22px;
+    background:
+      radial-gradient(circle at 10px 0, var(--berry) 11px, transparent 12px) 0 0 / 40px 22px repeat-x;
+    border-radius: 0 0 12px 12px;
+  }
+  .castle {
+    font-size: 96px;
+    line-height: 1;
+    display: inline-block;
+    animation: bob 2.4s ease-in-out infinite;
+    filter: drop-shadow(0 8px 10px rgba(91,50,22,.3));
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .crown { font-size: 34px; display: block; margin-bottom: -6px; }
+  h1 {
+    font-size: clamp(1.5rem, 6vw, 2.1rem);
+    margin: 14px 0 8px;
+    color: var(--choco);
+    letter-spacing: .5px;
+  }
+  .sub { font-size: 1.05rem; opacity: .85; }
+  .scroll {
+    margin: 18px auto 0;
+    padding: 12px 14px;
+    background: #fbe3b8;
+    border: 3px dashed var(--choco);
+    border-radius: 14px;
+    font-size: .95rem;
+  }
+  button {
+    margin-top: 24px;
+    font: inherit;
+    font-weight: 800;
+    font-size: 1.15rem;
+    padding: 14px 30px;
+    border: 4px solid var(--choco);
+    border-radius: 999px;
+    background: var(--gold);
+    color: var(--choco);
+    cursor: pointer;
+    box-shadow: 0 6px 0 var(--choco);
+    transition: transform .12s, box-shadow .12s;
+  }
+  button:hover { transform: translateY(-2px); }
+  button:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--choco); }
+  #stage {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 10;
+  }
+  #stage iframe, #player { width: 100%; height: 100%; border: 0; }
+  body.rolled { background: #000; cursor: default; }
+  body.rolled .card, body.rolled .sweet { display: none; }
+  body.rolled #stage { visibility: visible; pointer-events: auto; }
+  #backup {
+    display: none;
+    position: fixed;
+    left: 50%; bottom: 24px;
+    transform: translateX(-50%);
+    z-index: 20;
+    padding: 14px 26px;
+    border-radius: 999px;
+    background: var(--gold);
+    color: var(--choco);
+    border: 4px solid var(--choco);
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  body.show-backup #backup { display: block; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <span class="crown">👑</span>
+    <div class="castle">🏰</div>
+    <h1>Hear ye, hear ye!</h1>
+    <p class="sub">The Cookie Kingdom has chosen <strong>you</strong> to receive a royal treasure.</p>
+    <div class="scroll">🍪 Freshly baked by the royal bakers<br>✨ Only one treasure per visitor</div>
+    <button type="button">🍪 Claim my treasure</button>
+  </div>
+
+  <div id="stage"><div id="player"></div></div>
+  <a id="backup" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener">▶ Tap here to open your treasure</a>
+
+<script>
+  var sweets = ["🍪", "🍪", "🍪", "🧁", "🍬", "🍩", "🥐", "⭐"];
+  for (var i = 0; i < 18; i++) {
+    var s = document.createElement("div");
+    s.className = "sweet";
+    s.textContent = sweets[Math.floor(Math.random() * sweets.length)];
+    s.style.left = Math.random() * 100 + "vw";
+    s.style.fontSize = (22 + Math.random() * 22) + "px";
+    s.style.animationDuration = (6 + Math.random() * 8) + "s";
+    s.style.animationDelay = (-Math.random() * 14) + "s";
+    document.body.appendChild(s);
+  }
+
+  var VIDEO_ID = "dQw4w9WgXcQ";
+  var WATCH_URL = "https://www.youtube.com/watch?v=" + VIDEO_ID;
+  var player = null, playerReady = false, playing = false, rolled = false;
+
+  var tag = document.createElement("script");
+  tag.src = "https://www.youtube.com/iframe_api";
+  document.head.appendChild(tag);
+
+  window.onYouTubeIframeAPIReady = function () {
+    player = new YT.Player("player", {
+      videoId: VIDEO_ID,
+      playerVars: {
+        autoplay: 0, controls: 0, loop: 1, playlist: VIDEO_ID,
+        rel: 0, playsinline: 1, origin: location.origin
+      },
+      events: {
+        onReady: function () {
+          playerReady = true;
+          if (rolled) startVideo();
+        },
+        onStateChange: function (e) {
+          if (e.data === YT.PlayerState.PLAYING) playing = true;
+        },
+        onError: function () { fallback(); }
+      }
+    });
+  };
+
+  function startVideo() {
+    try { player.unMute(); player.setVolume(100); player.playVideo(); }
+    catch (e) { fallback(); }
+  }
+
+  function fallback() {
+    if (playing) return;
+    document.body.classList.add("show-backup");
+    try { window.top.location.href = WATCH_URL; }
+    catch (e) {
+      try { window.location.href = WATCH_URL; } catch (e2) {}
+    }
+  }
+
+  function rickroll() {
+    if (rolled) return;
+    rolled = true;
+    document.body.classList.add("rolled");
+    document.title = "Never gonna give you up 🕺";
+
+    var el = document.documentElement;
+    var fs = el.requestFullscreen || el.webkitRequestFullscreen;
+    if (fs) { try { var p = fs.call(el); if (p && p.catch) p.catch(function(){}); } catch (e) {} }
+
+    if (playerReady) startVideo();
+    setTimeout(function () { if (!playing) fallback(); }, 3500);
+  }
+
+  document.addEventListener("click", rickroll);
+  document.addEventListener("touchend", rickroll);
+  document.addEventListener("keydown", rickroll);
+</script>
+</body>
+</html>
